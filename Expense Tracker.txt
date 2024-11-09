@@ -1,0 +1,117 @@
+#include <stdio.h>
+
+#define MAX_TOPICS 5
+#define MAX_SUBTOPICS 5
+
+const char *mainTopics[MAX_TOPICS] = {
+    "Clothes",
+    "Food",
+    "Transportation",
+    "Entertainment",
+    "Utilities"
+};
+
+const char *subTopics[MAX_TOPICS][MAX_SUBTOPICS] = {
+    {"Cotton", "Rayon", "Silk", "Wool", "Polyester"},
+    {"Groceries", "Restaurants", "Snacks", "Beverages", "Fast Food"},
+    {"Bus", "Train", "Taxi", "Car Rental", "Flights"},
+    {"Movies", "Concerts", "Games", "Theater", "Sports"},
+    {"Electricity", "Water", "Internet", "Gas", "Garbage"}
+};
+
+float expenses[MAX_TOPICS][MAX_SUBTOPICS] = {
+    {10.5, 20.0, 35.0, 15.0, 25.0},
+    {50.0, 100.0, 20.0, 30.0, 40.0},
+    {2.5, 5.0, 10.0, 50.0, 200.0},
+    {12.0, 50.0, 30.0, 40.0, 60.0},
+    {100.0, 50.0, 40.0, 30.0, 20.0}
+};
+
+void displayMainTopics() {
+    printf("Main Topics:\n");
+    for (int i = 0; i < MAX_TOPICS; i++) {
+        printf("%d. %s\n", i + 1, mainTopics[i]);
+    }
+}
+
+void displaySubTopics(int mainTopicIndex) {
+    printf("Subtopics under %s:\n", mainTopics[mainTopicIndex]);
+    for (int i = 0; i < MAX_SUBTOPICS; i++) {
+        printf("%d. %s\n", i + 1, subTopics[mainTopicIndex][i]);
+    }
+}
+
+void displayExpenseSummary() {
+    printf("\nExpense Summary:\n");
+    for (int i = 0; i < MAX_TOPICS; i++) {
+        printf("%s:\n", mainTopics[i]);
+        for (int j = 0; j < MAX_SUBTOPICS; j++) {
+            printf("  %s: $%.2f\n", subTopics[i][j], expenses[i][j]);
+        }
+    }
+}
+void increaseExpense() {
+    int mainTopicChoice, subTopicChoice;
+    float increaseAmount;
+
+    displayMainTopics();
+    printf("Choose a main topic to increase the expense (1-%d): ", MAX_TOPICS);
+    scanf("%d", &mainTopicChoice);
+
+    if (mainTopicChoice < 1 || mainTopicChoice > MAX_TOPICS) {
+        printf("Invalid choice! Returning to main menu...\n");
+        return;
+    }
+
+    displaySubTopics(mainTopicChoice - 1);
+    printf("Choose a subtopic to increase the expense (1-%d): ", MAX_SUBTOPICS);
+    scanf("%d", &subTopicChoice);
+
+    if (subTopicChoice < 1 || subTopicChoice > MAX_SUBTOPICS) {
+        printf("Invalid choice! Returning to main menu...\n");
+        return;
+    }
+
+    printf("Enter the amount to increase the expense for %s -> %s: $", mainTopics[mainTopicChoice - 1], subTopics[mainTopicChoice - 1][subTopicChoice - 1]);
+    scanf("%f", &increaseAmount);
+
+    expenses[mainTopicChoice - 1][subTopicChoice - 1] += increaseAmount;
+
+    printf("Expense for %s -> %s has been increased by $%.2f. New expense is $%.2f.\n", 
+            mainTopics[mainTopicChoice - 1], 
+            subTopics[mainTopicChoice - 1][subTopicChoice - 1], 
+            increaseAmount, 
+            expenses[mainTopicChoice - 1][subTopicChoice - 1]);
+}
+
+int main() {
+    int choice;
+
+    while (1) {
+        printf("\nExpense Tracker Menu:\n");
+        printf("1. Display Main Topics\n");
+        printf("2. Display Expense Summary\n");
+        printf("3. Increase Expense\n");
+        printf("4. Exit\n");
+        printf("Choose an option (1-4): ");
+        scanf("%d", &choice);
+
+        switch (choice) {
+            case 1:
+                displayMainTopics();
+                break;
+            case 2:
+                displayExpenseSummary();
+                break;
+            case 3:
+                increaseExpense();
+                break;
+            case 4:
+                return 0;
+              default:
+                printf("Invalid choice! Please try again.\n");
+        }
+    }
+
+    return 0;
+}
